@@ -928,3 +928,57 @@ function getRandomInt(min, max) {
     | Javascript Read Offline  / Online
     |-----------------------------------
     */
+    var _SYSTEM_ = {}
+    window.addEventListener('offline', function(e) { console.log(e) });
+
+    window.addEventListener('online', function(e) { console.log('online'); });  
+
+    /*
+    |-----------------------------------
+    | Javascript Watch Object Change
+    |-----------------------------------
+    */
+
+        /*
+        * object.watch v0.0.1: Cross-browser object.watch
+        *
+        * By Elijah Grey, http://eligrey.com
+        *
+        * A shim that partially implements object.watch and object.unwatch
+        * in browsers that have accessor support.
+        *
+        * Public Domain.
+        * NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
+        */
+
+        // object.watch
+        if (!Object.prototype.listen)
+    Object.prototype.listen = function (prop, handler) {
+        var oldval = this[prop], newval = oldval,
+        getter = function () {
+            return newval;
+        },
+        setter = function (val) {
+            oldval = newval;
+            return newval = handler.call(this, prop, oldval, val);
+        };
+        if (delete this[prop]) { // can't listen constants
+            if (Object.defineProperty) // ECMAScript 5
+                Object.defineProperty(this, prop, {
+                    get: getter,
+                    set: setter
+                });
+            else if (Object.prototype.__defineGetter__ && Object.prototype.__defineSetter__) { // legacy
+                Object.prototype.__defineGetter__.call(this, prop, getter);
+                Object.prototype.__defineSetter__.call(this, prop, setter);
+            }
+        }
+    };
+
+// object.unlisten
+if (!Object.prototype.unlisten)
+    Object.prototype.unlisten = function (prop) {
+        var val = this[prop];
+        delete this[prop]; // remove accessors
+        this[prop] = val;
+    };
