@@ -334,7 +334,6 @@ function ajax(options)
     var deff  = $.Deferred(),
         fData = new FormData();  
 
-        console.log(options.data.constructor == FormData, options.data)
     options = $.extend({
         cache   : false,
         upload_progress: function(event, percentage)

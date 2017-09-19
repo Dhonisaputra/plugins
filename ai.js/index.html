@@ -2,9 +2,36 @@
 <html>
 <head>
 	<title>Tester AI.js</title>
+	<script type="text/javascript" src="//code.jquery.com/jquery.min.js"></script>
 	<script type="text/javascript" src="ai.js"></script>
+	<script type="text/javascript" src="ai.storage.js"></script>
 </head>
 <body>
+	<input type="file" id="file" name="" onchange="upload()">
+	<script type="text/javascript">
+		var ai = new ai({
+			host: 'http://sekolah.com',
+			apiKey: 'sdf23423fdasd',
+			v: 'v3'
+		});
 
+		ai.storage().ref().fetch()
+		.done(function(res){
+			console.log(res)
+		})
+		.fail(function(e){
+
+			console.log(e)
+		})
+
+		function upload()
+		{
+			var file = $('#file')[0].files[0]
+			ai.storage().ref().upload({
+				file: file,
+			})
+		}
+		
+	</script>
 </body>
 </html>
