@@ -1,22 +1,19 @@
 ai.prototype.storage = function() {
-	$this = ai.storage.prototype;
+	$this = this.storage.prototype;
 	$this.config = this.main._data.config;
 	$this.main = this;
 	$this.config.request = $this.config.host
-	return ai.storage.prototype;
+	return $this;
 };
 ai.prototype.storage.prototype =
 {
 	dynamicVariable:{
-		fetch_params : {}
+		fetch_params : {where:{}}
 	},
 	config: {},
-	ref: function(folder)
+	ref: function(file_id)
 	{
-		folder = folder||'';
-		var childSplit = folder.split('/')
-		childSplitLast = childSplit.pop();
-		this.dynamicVariable.fetch_params.relatedWith = childSplitLast||0;
+		this.dynamicVariable.fetch_params.where.relatedWith = file_id||0;
 		return this;
 
 	},
@@ -38,6 +35,36 @@ ai.prototype.storage.prototype =
 	{
 		var fetch_params 	= this.dynamicVariable.fetch_params;
 		var url 			= this.config.request+this.config.serverpath+'storage/upload';
+		params 				= $.extend(fetch_params, {}, params)
+		return this.main.main._util.ajax({
+			url: url,
+			data: params,
+			type: "POST",
+			cache: false,
+			contentType: false,
+			processData: false
+		})	
+	},
+
+	mkdir: function(params)
+	{
+		var fetch_params 	= this.dynamicVariable.fetch_params;
+		var url 			= this.config.request+this.config.serverpath+'storage/mkdir';
+		params 				= $.extend(fetch_params, {}, params)
+		return this.main.main._util.ajax({
+			url: url,
+			data: params,
+			type: "POST",
+			cache: false,
+			contentType: false,
+			processData: false
+		})	
+	},
+
+	rm: function(params)
+	{
+		var fetch_params 	= this.dynamicVariable.fetch_params;
+		var url 			= this.config.request+this.config.serverpath+'storage/rm';
 		params 				= $.extend(fetch_params, {}, params)
 		return this.main.main._util.ajax({
 			url: url,
